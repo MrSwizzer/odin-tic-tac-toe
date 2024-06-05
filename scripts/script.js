@@ -16,51 +16,56 @@ const Gameboard = (function () {
     }
     const getBoard = () => board;
 
-    console.log(board);
-
     const setCell = function (row, col, player) {
-        board[row][col] = player.getSymbol();
-        checkWinner();
-    }
-
-    function checkWinner() {
-
-        if (board[0][0] === "X" && board[0][1] === "X" && board[0][2] === "X") {
-            console.log("X WIN'S");
-        } else if (board[1][0] === "X" && board[1][1] === "X" && board[1][2] === "X") {
-            console.log("X WIN'S");
-        } else if (board[2][0] === "X" && board[2][1] === "X" && board[2][2] === "X") {
-            console.log("X WIN'S");
-        }  else if (board[0][0] === "X" && board[1][0] === "X" && board[2][0] === "X") {
-            console.log("X WIN'S");
-        } else if (board[0][1] === "X" && board[1][1] === "X" && board[2][1] === "X") {
-            console.log("X WIN'S");
-        } else if (board[0][2] === "X" && board[1][2] === "X" && board[2][2] === "X") {
-            console.log("X WIN'S");
-        } else if (board[0][0] === "X" && board[1][1] === "X" && board[2][2] === "X") {
-            console.log("X WIN'S");
-        } else if (board[2][0] === "X" && board[1][1] === "X" && board[0][2] === "X") {
-            console.log("X WIN'S");
-        } else if (board[0][0] === "O" && board[0][1] === "O" && board[0][2] === "O") {
-            console.log("O WIN'S");
-        } else if (board[1][0] === "O" && board[1][1] === "O" && board[1][2] === "O") {
-            console.log("O WIN'S");
-        } else if (board[2][0] === "O" && board[2][1] === "O" && board[2][2] === "O") {
-            console.log("O WIN'S");
-        }  else if (board[0][0] === "O" && board[1][0] === "O" && board[2][0] === "O") {
-            console.log("O WIN'S");
-        } else if (board[0][1] === "O" && board[1][1] === "O" && board[2][1] === "O") {
-            console.log("O WIN'S");
-        } else if (board[0][2] === "O" && board[1][2] === "O" && board[2][2] === "O") {
-            console.log("O WIN'S");
-        } else if (board[0][0] === "O" && board[1][1] === "O" && board[2][2] === "O") {
-            console.log("O WIN'S");
-        } else if (board[2][0] === "O" && board[1][1] === "O" && board[0][2] === "O") {
-            console.log("O WIN'S");
+        if (row >= 2 || col >= 2) {
+            return "Selection out of bounds";
+        } else {
+            if (board[row][col] === "") {
+                board[row][col] = player.getSymbol();
+            } else {
+                return "Cell is already taken";
+            }
+            checkWinner();
         }
     }
 
-    return { getBoard, setCell , checkWinner}
+    function checkWinner() {
+        if (board[0][0] === "X" && board[0][1] === "X" && board[0][2] === "X") {
+            console.log("X WINS!");
+        } else if (board[1][0] === "X" && board[1][1] === "X" && board[1][2] === "X") {
+            console.log("X WINS!");
+        } else if (board[2][0] === "X" && board[2][1] === "X" && board[2][2] === "X") {
+            console.log("X WINS!");
+        } else if (board[0][0] === "X" && board[1][0] === "X" && board[2][0] === "X") {
+            console.log("X WINS!");
+        } else if (board[0][1] === "X" && board[1][1] === "X" && board[2][1] === "X") {
+            console.log("X WINS!");
+        } else if (board[0][2] === "X" && board[1][2] === "X" && board[2][2] === "X") {
+            console.log("X WINS!");
+        } else if (board[0][0] === "X" && board[1][1] === "X" && board[2][2] === "X") {
+            console.log("X WINS!");
+        } else if (board[2][0] === "X" && board[1][1] === "X" && board[0][2] === "X") {
+            console.log("X WINS!");
+        } else if (board[0][0] === "O" && board[0][1] === "O" && board[0][2] === "O") {
+            console.log("O WINS!");
+        } else if (board[1][0] === "O" && board[1][1] === "O" && board[1][2] === "O") {
+            console.log("O WINS!");
+        } else if (board[2][0] === "O" && board[2][1] === "O" && board[2][2] === "O") {
+            console.log("O WINS!");
+        } else if (board[0][0] === "O" && board[1][0] === "O" && board[2][0] === "O") {
+            console.log("O WINS!");
+        } else if (board[0][1] === "O" && board[1][1] === "O" && board[2][1] === "O") {
+            console.log("O WINS!");
+        } else if (board[0][2] === "O" && board[1][2] === "O" && board[2][2] === "O") {
+            console.log("O WINS!");
+        } else if (board[0][0] === "O" && board[1][1] === "O" && board[2][2] === "O") {
+            console.log("O WINS!");
+        } else if (board[2][0] === "O" && board[1][1] === "O" && board[0][2] === "O") {
+            console.log("O WINS!");
+        }
+    }
+
+    return { getBoard, setCell }
 })();
 
 console.log(Gameboard.getBoard());
@@ -74,10 +79,17 @@ function createPlayer(name, symbol) {
     return { getName, getWins, addWin, getSymbol }
 }
 
-/* const playerX = createPlayer("X Player", "X");
-player1.addWin();
+const playerX = createPlayer("X Player", "X");
+playerX.addWin();
 console.log({
-    name : player1.getName(), 
-    wins: player1.getWins(),
-    symbol: player1.getSymbol()
-});*/
+    name: playerX.getName(),
+    wins: playerX.getWins(),
+    symbol: playerX.getSymbol()
+});
+
+const playerY = createPlayer("Y Player", "Y");
+console.log({
+    name: playerY.getName(),
+    wins: playerY.getWins(),
+    symbol: playerY.getSymbol()
+});
