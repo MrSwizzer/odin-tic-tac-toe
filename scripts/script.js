@@ -1,7 +1,7 @@
 //{} [] ()
 
 const Gameboard = (function () {
-    const board = [];
+    let board = [];
     const ROWS = 3;
     const COLUMNS = 3;
 
@@ -16,34 +16,30 @@ const Gameboard = (function () {
     }
     const getBoard = () => board;
 
-    return {getBoard}
+    const setCell = function (row, col, player) {
+        board[row][col] = player.getSymbol();
+    }
+
+    return { getBoard, setCell }
 })();
 
 console.log(Gameboard.getBoard());
 
-/* function createPlayer(name) {
+function createPlayer(name, symbol) {
+    const getName = () => name;
+    const getSymbol = () => symbol;
     let wins = 0;
     const getWins = () => wins;
     const addWin = () => wins++;
-    const getName = () => name;
-    return {getName, getWins, addWin}
-} */
+    return { getName, getWins, addWin, getSymbol }
+}
 
-const playerCreator = (function (name) {
-    let wins = 0;
-    const getWins = () => wins;
-    const addWin = () => wins++;
-    const getName = () => name;
-    return {getName, getWins, addWin}
-})();
-
-playerCreator("Dani").getName();
-
-/* const player1 = createPlayer("Dani");
+/* const player1 = createPlayer("Dani", "X");
 player1.addWin();
 console.log({
     name : player1.getName(), 
-    wins: player1.getWins()
+    wins: player1.getWins(),
+    symbol: player1.getSymbol()
 });
 
 const player2 = createPlayer("Luk");
@@ -53,3 +49,4 @@ console.log({
     name : player2.getName(), 
     wins: player2.getWins()
 }); */
+
