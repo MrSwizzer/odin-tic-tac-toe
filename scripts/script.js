@@ -1,11 +1,10 @@
 //{} [] ()
 
-const gameboard = (function () {
+const gameboardObj = (function () {
     let board = [];
     const ROWS = 3;
     const COLUMNS = 3;
 
-    let counter = 1;
     for (let i = 0; i < ROWS; i++) {
         board[i] = [];
 
@@ -17,23 +16,21 @@ const gameboard = (function () {
     const getBoard = () => board;
 
     const setCell = function (row, col, playerSymbol) {
-        if (row > 2 || col > 2) {
-            return "Selection out  bounds";
-        } else {
-            if (board[row][col] === "") {
-                board[row][col] = playerSymbol;
-            } else {
-                return "Cell is already taken";
+        board[row][col] = playerSymbol;
+    }
+
+    const resetBoard = function () {
+        for (let i = 0; i < ROWS; i++) {
+            board[i] = [];
+    
+            for (let j = 0; j < COLUMNS; j++) {
+                board[i][j] = "";
             }
         }
     }
 
-    
-
-    return { getBoard, setCell }
+    return { getBoard, setCell, resetBoard }
 })();
-
-console.log(gameboard.getBoard());
 
 
 function createPlayer(name, symbol) {
@@ -50,7 +47,6 @@ function createPlayer(name, symbol) {
 const gameController = (function () {
 
     const playerX = createPlayer("X Player", "X");
-    playerX.addWin();
     console.log({
         name: playerX.getName(),
         wins: playerX.getWins(),
@@ -64,7 +60,8 @@ const gameController = (function () {
         symbol: playerO.getSymbol()
     });
 
-    const board = gameboard;
+    const boardObj = gameboardObj;
+    const board = boardObj.getBoard();
     let activePlayer = playerX;
 
 
@@ -74,52 +71,49 @@ const gameController = (function () {
     }
 
     function playRound(row, column) {
-        board.setCell(row,column, activePlayer.getSymbol());
-        checkAllWinConditions();
-        switchActivePlayer();
-        board.getBoard();
-    }
 
-    function checkAllWinConditions() {
-        if (winConditions.isFirstRowFullOfX()) {
-            console.log("X WINS!");
-        } else if (winConditions.isSecondRowFullOfX()) {
-            console.log("X WINS!");
-        } else if (winConditions.isThirdRowFullOfX()) {
-            console.log("X WINS!");
-        } else if (winConditions.isFirstColumnFullOfX()) {
-            console.log("X WINS!");
-        } else if (winConditions.isSecondColumnFullOfX()) {
-            console.log("X WINS!");
-        } else if (winConditions.isThirdColumnFullOfX()) {
-            console.log("X WINS!");
-        } else if (winConditions.isBottomLeftToTopRightFullOfX()) {
-            console.log("X WINS!");
-        } else if (winConditions.isTopLeftToBottomRightFullOfX()) {
-            console.log("X WINS!");
-        } else if (winConditions.isFirstRowFullOfO()) {
-            console.log("O WINS!");
-        } else if (winConditions.isFirstRowFullOfO()) {
-            console.log("O WINS!");
-        } else if (winConditions.isSecondRowFullOfO()) {
-            console.log("O WINS!");
-        } else if (winConditions.isThirdRowFullOfO()) {
-            console.log("O WINS!");
-        } else if (winConditions.isFirstColumnFullOfO()) {
-            console.log("O WINS!");
-        } else if (winConditions.isSecondColumnFullOfO()) {
-            console.log("O WINS!");
-        } else if (winConditions.isThirdColumnFullOfO()) {
-            console.log("O WINS!");
-        } else if (winConditions.isBottomLeftToTopRightFullOfO()) {
-            console.log("O WINS!");
-        } else if (winConditions.isTopLeftToBottomRightFullOfO()) {
-            console.log("O WINS!");
+        if (row > 2 || column > 2) {
+            return "Selection out of bounds";
+        } else {
+            if (board[row][column] === "") {
+                boardObj.setCell(row, column, activePlayer.getSymbol());
+                if (checkAllWinConditions()) {
+                    boardObj.resetBoard();
+                    activePlayer.addWin();
+                    console.log(`Player X Wins: ${playerX.getWins()}`);
+                    console.log(`Player X Wins: ${playerO.getWins()}`);
+                    return `${activePlayer.getName()} Won the Game!`;
+                }
+                switchActivePlayer();
+                console.log(boardObj.getBoard());
+            } else {
+                return "Cell is already taken";
+            }
         }
     }
 
+    function checkAllWinConditions() {
+        return winConditions.isFirstRowFullOfX()
+        || winConditions.isSecondRowFullOfX()
+        || winConditions.isThirdRowFullOfX()
+        || winConditions.isFirstColumnFullOfX()
+        || winConditions.isSecondColumnFullOfX()
+        || winConditions.isThirdColumnFullOfX()
+        || winConditions.isBottomLeftToTopRightFullOfX()
+        || winConditions.isTopLeftToBottomRightFullOfX()
+        || winConditions.isFirstRowFullOfO()
+        || winConditions.isFirstRowFullOfO()
+        || winConditions.isSecondRowFullOfO()
+        || winConditions.isThirdRowFullOfO()
+        || winConditions.isFirstColumnFullOfO()
+        || winConditions.isSecondColumnFullOfO()
+        || winConditions.isThirdColumnFullOfO()
+        || winConditions.isBottomLeftToTopRightFullOfO()
+        || winConditions.isTopLeftToBottomRightFullOfO();
+
+    }
+
     const winConditions = (function () {
-        let board = gameboard.getBoard();
         function isFirstRowFullOfX() {
             return board[0][0] === "X" && board[0][1] === "X" && board[0][2] === "X";
         }
