@@ -25,96 +25,104 @@ const Gameboard = (function () {
             } else {
                 return "Cell is already taken";
             }
-            checkWinner();
+            checkAllWinConditions();
         }
     }
 
-    function checkWinner() {
-        if (isFirstRowFullOfX()) {
+    function checkAllWinConditions() {
+        if (winConditions.isFirstRowFullOfX()) {
             console.log("X WINS!");
-        } else if (isSecondRowFullOfX()) {
+        } else if (winConditions.isSecondRowFullOfX()) {
             console.log("X WINS!");
-        } else if (isThirdRowFullOfX()) {
+        } else if (winConditions.isThirdRowFullOfX()) {
             console.log("X WINS!");
-        } else if (isFirstColumnFullOfX()) {
+        } else if (winConditions.isFirstColumnFullOfX()) {
             console.log("X WINS!");
-        } else if (isSecondColumnFullOfX()) {
+        } else if (winConditions.isSecondColumnFullOfX()) {
             console.log("X WINS!");
-        } else if (isThirdColumnFullOfX()) {
+        } else if (winConditions.isThirdColumnFullOfX()) {
             console.log("X WINS!");
-        } else if (isBottomLeftToTopRightFullOfX()) {
+        } else if (winConditions.isBottomLeftToTopRightFullOfX()) {
             console.log("X WINS!");
-        } else if (isTopLeftToBottomRightFullOfX()) {
+        } else if (winConditions.isTopLeftToBottomRightFullOfX()) {
             console.log("X WINS!");
-        } else if (isFirstRowFullOfO()) {
+        } else if (winConditions.isFirstRowFullOfO()) {
             console.log("O WINS!");
-        } else if (isFirstRowFullOfO()) {
+        } else if (winConditions.isFirstRowFullOfO()) {
             console.log("O WINS!");
-        } else if (isSecondRowFullOfO()) {
+        } else if (winConditions.isSecondRowFullOfO()) {
             console.log("O WINS!");
-        } else if (isThirdRowFullOfO()) {
+        } else if (winConditions.isThirdRowFullOfO()) {
             console.log("O WINS!");
-        } else if (isFirstColumnFullOfO()) {
+        } else if (winConditions.isFirstColumnFullOfO()) {
             console.log("O WINS!");
-        } else if (isSecondColumnFullOfO()) {
+        } else if (winConditions.isSecondColumnFullOfO()) {
             console.log("O WINS!");
-        } else if (isThirdColumnFullOfO()) {
+        } else if (winConditions.isThirdColumnFullOfO()) {
             console.log("O WINS!");
-        } else if (isBottomLeftToTopRightFullOfO()) {
+        } else if (winConditions.isBottomLeftToTopRightFullOfO()) {
             console.log("O WINS!");
-        } else if (isTopLeftToBottomRightFullOfO()) {
+        } else if (winConditions.isTopLeftToBottomRightFullOfO()) {
             console.log("O WINS!");
         }
     }
-    
-    function isFirstRowFullOfX() {
-        return board[0][0] === "X" && board[0][1] === "X" && board[0][2] === "X";
-    }
-    function isSecondRowFullOfX() {
-        return board[1][0] === "X" && board[1][1] === "X" && board[1][2] === "X";
-    }
-    function isThirdRowFullOfX() {
-        return board[2][0] === "X" && board[2][1] === "X" && board[2][2] === "X";
-    }
-    function isFirstColumnFullOfX() {
-        return board[0][0] === "X" && board[1][0] === "X" && board[2][0] === "X";
-    }
-    function isSecondColumnFullOfX() {
-        return board[0][1] === "X" && board[1][1] === "X" && board[2][1] === "X";
-    }
-    function isThirdColumnFullOfX() {
-        return board[0][2] === "X" && board[1][2] === "X" && board[2][2] === "X";
-    }
-    function isBottomLeftToTopRightFullOfX() {
-        return board[2][0] === "X" && board[1][1] === "X" && board[0][2] === "X";
-    }
-    function isTopLeftToBottomRightFullOfX() {
-        return board[0][0] === "X" && board[1][1] === "X" && board[2][2] === "X";
-    }
-    function isFirstRowFullOfO() {
-        return board[0][0] === "O" && board[0][1] === "O" && board[0][2] === "O";
-    }
-    function isSecondRowFullOfO() {
-        return board[1][0] === "O" && board[1][1] === "O" && board[1][2] === "O";
-    }
-    function isThirdRowFullOfO() {
-        return board[2][0] === "O" && board[2][1] === "O" && board[2][2] === "O";
-    }
-    function isFirstColumnFullOfO() {
-        return board[0][0] === "O" && board[1][0] === "O" && board[2][0] === "O";
-    }
-    function isSecondColumnFullOfO() {
-        return board[0][1] === "O" && board[1][1] === "O" && board[2][1] === "O";
-    }
-    function isThirdColumnFullOfO() {
-        return board[0][2] === "O" && board[1][2] === "O" && board[2][2] === "O";
-    }
-    function isBottomLeftToTopRightFullOfO() {
-        return board[2][0] === "O" && board[1][1] === "O" && board[0][2] === "O";
-    }
-    function isTopLeftToBottomRightFullOfO() {
-        return board[0][0] === "O" && board[1][1] === "O" && board[2][2] === "O";
-    }
+
+    const winConditions = (function () {
+        function isFirstRowFullOfX() {
+            return board[0][0] === "X" && board[0][1] === "X" && board[0][2] === "X";
+        }
+        function isSecondRowFullOfX() {
+            return board[1][0] === "X" && board[1][1] === "X" && board[1][2] === "X";
+        }
+        function isThirdRowFullOfX() {
+            return board[2][0] === "X" && board[2][1] === "X" && board[2][2] === "X";
+        }
+        function isFirstColumnFullOfX() {
+            return board[0][0] === "X" && board[1][0] === "X" && board[2][0] === "X";
+        }
+        function isSecondColumnFullOfX() {
+            return board[0][1] === "X" && board[1][1] === "X" && board[2][1] === "X";
+        }
+        function isThirdColumnFullOfX() {
+            return board[0][2] === "X" && board[1][2] === "X" && board[2][2] === "X";
+        }
+        function isBottomLeftToTopRightFullOfX() {
+            return board[2][0] === "X" && board[1][1] === "X" && board[0][2] === "X";
+        }
+        function isTopLeftToBottomRightFullOfX() {
+            return board[0][0] === "X" && board[1][1] === "X" && board[2][2] === "X";
+        }
+        function isFirstRowFullOfO() {
+            return board[0][0] === "O" && board[0][1] === "O" && board[0][2] === "O";
+        }
+        function isSecondRowFullOfO() {
+            return board[1][0] === "O" && board[1][1] === "O" && board[1][2] === "O";
+        }
+        function isThirdRowFullOfO() {
+            return board[2][0] === "O" && board[2][1] === "O" && board[2][2] === "O";
+        }
+        function isFirstColumnFullOfO() {
+            return board[0][0] === "O" && board[1][0] === "O" && board[2][0] === "O";
+        }
+        function isSecondColumnFullOfO() {
+            return board[0][1] === "O" && board[1][1] === "O" && board[2][1] === "O";
+        }
+        function isThirdColumnFullOfO() {
+            return board[0][2] === "O" && board[1][2] === "O" && board[2][2] === "O";
+        }
+        function isBottomLeftToTopRightFullOfO() {
+            return board[2][0] === "O" && board[1][1] === "O" && board[0][2] === "O";
+        }
+        function isTopLeftToBottomRightFullOfO() {
+            return board[0][0] === "O" && board[1][1] === "O" && board[2][2] === "O";
+        }
+
+        return {
+            isFirstRowFullOfX, isSecondRowFullOfX, isThirdRowFullOfX, isFirstColumnFullOfX, isSecondColumnFullOfX, isThirdColumnFullOfX,
+            isBottomLeftToTopRightFullOfX, isTopLeftToBottomRightFullOfX, isFirstRowFullOfO, isSecondRowFullOfO, isThirdRowFullOfO,
+            isFirstColumnFullOfO, isSecondColumnFullOfO, isThirdColumnFullOfO, isBottomLeftToTopRightFullOfO, isTopLeftToBottomRightFullOfO
+        }
+    })();
 
     return { getBoard, setCell }
 })();
