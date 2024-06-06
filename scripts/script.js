@@ -1,6 +1,6 @@
 //{} [] ()
 
-const Gameboard = (function () {
+const gameboard = (function () {
     let board = [];
     const ROWS = 3;
     const COLUMNS = 3;
@@ -16,17 +16,68 @@ const Gameboard = (function () {
 
     const getBoard = () => board;
 
-    const setCell = function (row, col, player) {
+    const setCell = function (row, col, playerSymbol) {
         if (row > 2 || col > 2) {
             return "Selection out  bounds";
         } else {
             if (board[row][col] === "") {
-                board[row][col] = player.getSymbol();
+                board[row][col] = playerSymbol;
             } else {
                 return "Cell is already taken";
             }
-            checkAllWinConditions();
         }
+    }
+
+    
+
+    return { getBoard, setCell }
+})();
+
+console.log(gameboard.getBoard());
+
+
+function createPlayer(name, symbol) {
+    const getName = () => name;
+    const getSymbol = () => symbol;
+    let wins = 0;
+    const getWins = () => wins;
+    const addWin = () => wins++;
+    return { getName, getWins, addWin, getSymbol }
+}
+
+
+
+const gameController = (function () {
+
+    const playerX = createPlayer("X Player", "X");
+    playerX.addWin();
+    console.log({
+        name: playerX.getName(),
+        wins: playerX.getWins(),
+        symbol: playerX.getSymbol()
+    });
+
+    const playerO = createPlayer("O Player", "O");
+    console.log({
+        name: playerO.getName(),
+        wins: playerO.getWins(),
+        symbol: playerO.getSymbol()
+    });
+
+    const board = gameboard;
+    let activePlayer = playerX;
+
+
+    function switchActivePlayer() {
+        activePlayer = (activePlayer === playerX) ? playerO : playerX;
+        console.log("Switched to: " + activePlayer.getName());
+    }
+
+    function playRound(row, column) {
+        board.setCell(row,column, activePlayer.getSymbol());
+        checkAllWinConditions();
+        switchActivePlayer();
+        board.getBoard();
     }
 
     function checkAllWinConditions() {
@@ -68,6 +119,7 @@ const Gameboard = (function () {
     }
 
     const winConditions = (function () {
+        let board = gameboard.getBoard();
         function isFirstRowFullOfX() {
             return board[0][0] === "X" && board[0][1] === "X" && board[0][2] === "X";
         }
@@ -124,31 +176,6 @@ const Gameboard = (function () {
         }
     })();
 
-    return { getBoard, setCell }
+
+    return { playRound }
 })();
-
-console.log(Gameboard.getBoard());
-
-function createPlayer(name, symbol) {
-    const getName = () => name;
-    const getSymbol = () => symbol;
-    let wins = 0;
-    const getWins = () => wins;
-    const addWin = () => wins++;
-    return { getName, getWins, addWin, getSymbol }
-}
-
-const playerX = createPlayer("X Player", "X");
-playerX.addWin();
-console.log({
-    name: playerX.getName(),
-    wins: playerX.getWins(),
-    symbol: playerX.getSymbol()
-});
-
-const playerO = createPlayer("O Player", "O");
-console.log({
-    name: playerO.getName(),
-    wins: playerO.getWins(),
-    symbol: playerO.getSymbol()
-});
