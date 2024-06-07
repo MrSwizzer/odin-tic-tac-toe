@@ -55,20 +55,22 @@ const gameController = (function () {
     }
 
     function playRound(row, column) {
-
         if (row > 2 || column > 2) {
             return "Selection out of bounds";
         } else {
             if (board[row][column] === "") {
                 boardObj.setCell(row, column, activePlayer.getToken());
-                if (checkAllWinConditions(activePlayer.getToken())) {
-                    boardObj.resetBoard();
-                    activePlayer.addWin();
-                    console.log(`Player X Wins: ${playerX.getWins()}`);
-                    console.log(`Player O Wins: ${playerO.getWins()}`);
-                    console.log(`${activePlayer.getName()} Won the Game!`);
-                    switchActivePlayer();
-                    return
+                for (const method in winConditions) {
+                    const result = winConditions[method](activePlayer.getToken());
+                    if (winConditions.hasOwnProperty(method) && result) {
+                        boardObj.resetBoard();
+                        activePlayer.addWin();
+                        console.log(`Player X Wins: ${playerX.getWins()}`);
+                        console.log(`Player O Wins: ${playerO.getWins()}`);
+                        console.log(`${activePlayer.getName()} Won the Game!`);
+                        switchActivePlayer();
+                        return
+                    }
                 }
                 switchActivePlayer();
                 console.log(boardObj.getBoard());
@@ -76,17 +78,6 @@ const gameController = (function () {
                 return "Cell is already taken";
             }
         }
-    }
-
-    function checkAllWinConditions(token) {
-        return winConditions.isFirstRowFull(token)
-            || winConditions.isSecondRowFull(token)
-            || winConditions.isThirdRowFull(token)
-            || winConditions.isFirstColumnFull(token)
-            || winConditions.isSecondColumnFull(token)
-            || winConditions.isThirdColumnFull(token)
-            || winConditions.isBottomLeftToTopRightFull(token)
-            || winConditions.isTopLeftToBottomRightFull(token);
     }
 
     const winConditions = (function () {
