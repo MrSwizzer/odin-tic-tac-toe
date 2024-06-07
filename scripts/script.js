@@ -1,5 +1,3 @@
-//{} [] ()
-
 const gameboardObj = (function () {
     let board = [];
     const ROWS = 3;
@@ -15,14 +13,14 @@ const gameboardObj = (function () {
 
     const getBoard = () => board;
 
-    const setCell = function (row, col, playerSymbol) {
-        board[row][col] = playerSymbol;
+    const setCell = function (row, col, playertoken) {
+        board[row][col] = playertoken;
     }
 
     const resetBoard = function () {
         for (let i = 0; i < ROWS; i++) {
             board[i] = [];
-    
+
             for (let j = 0; j < COLUMNS; j++) {
                 board[i][j] = "";
             }
@@ -33,37 +31,23 @@ const gameboardObj = (function () {
 })();
 
 
-function createPlayer(name, symbol) {
+function createPlayer(name, token) {
     const getName = () => name;
-    const getSymbol = () => symbol;
+    const getToken = () => token;
     let wins = 0;
     const getWins = () => wins;
     const addWin = () => wins++;
-    return { getName, getWins, addWin, getSymbol }
+    return { getName, getWins, addWin, getToken }
 }
-
-
 
 const gameController = (function () {
 
     const playerX = createPlayer("X Player", "X");
-    console.log({
-        name: playerX.getName(),
-        wins: playerX.getWins(),
-        symbol: playerX.getSymbol()
-    });
-
     const playerO = createPlayer("O Player", "O");
-    console.log({
-        name: playerO.getName(),
-        wins: playerO.getWins(),
-        symbol: playerO.getSymbol()
-    });
 
     const boardObj = gameboardObj;
     const board = boardObj.getBoard();
     let activePlayer = playerX;
-
 
     function switchActivePlayer() {
         activePlayer = (activePlayer === playerX) ? playerO : playerX;
@@ -76,13 +60,15 @@ const gameController = (function () {
             return "Selection out of bounds";
         } else {
             if (board[row][column] === "") {
-                boardObj.setCell(row, column, activePlayer.getSymbol());
-                if (checkAllWinConditions()) {
+                boardObj.setCell(row, column, activePlayer.getToken());
+                if (checkAllWinConditions(activePlayer.getToken())) {
                     boardObj.resetBoard();
                     activePlayer.addWin();
                     console.log(`Player X Wins: ${playerX.getWins()}`);
-                    console.log(`Player X Wins: ${playerO.getWins()}`);
-                    return `${activePlayer.getName()} Won the Game!`;
+                    console.log(`Player O Wins: ${playerO.getWins()}`);
+                    console.log(`${activePlayer.getName()} Won the Game!`);
+                    switchActivePlayer();
+                    return
                 }
                 switchActivePlayer();
                 console.log(boardObj.getBoard());
@@ -92,84 +78,46 @@ const gameController = (function () {
         }
     }
 
-    function checkAllWinConditions() {
-        return winConditions.isFirstRowFullOfX()
-        || winConditions.isSecondRowFullOfX()
-        || winConditions.isThirdRowFullOfX()
-        || winConditions.isFirstColumnFullOfX()
-        || winConditions.isSecondColumnFullOfX()
-        || winConditions.isThirdColumnFullOfX()
-        || winConditions.isBottomLeftToTopRightFullOfX()
-        || winConditions.isTopLeftToBottomRightFullOfX()
-        || winConditions.isFirstRowFullOfO()
-        || winConditions.isFirstRowFullOfO()
-        || winConditions.isSecondRowFullOfO()
-        || winConditions.isThirdRowFullOfO()
-        || winConditions.isFirstColumnFullOfO()
-        || winConditions.isSecondColumnFullOfO()
-        || winConditions.isThirdColumnFullOfO()
-        || winConditions.isBottomLeftToTopRightFullOfO()
-        || winConditions.isTopLeftToBottomRightFullOfO();
-
+    function checkAllWinConditions(token) {
+        return winConditions.isFirstRowFull(token)
+            || winConditions.isSecondRowFull(token)
+            || winConditions.isThirdRowFull(token)
+            || winConditions.isFirstColumnFull(token)
+            || winConditions.isSecondColumnFull(token)
+            || winConditions.isThirdColumnFull(token)
+            || winConditions.isBottomLeftToTopRightFull(token)
+            || winConditions.isTopLeftToBottomRightFull(token);
     }
 
     const winConditions = (function () {
-        function isFirstRowFullOfX() {
-            return board[0][0] === "X" && board[0][1] === "X" && board[0][2] === "X";
+        function isFirstRowFull(token) {
+            return board[0][0] === token && board[0][1] === token && board[0][2] === token;
         }
-        function isSecondRowFullOfX() {
-            return board[1][0] === "X" && board[1][1] === "X" && board[1][2] === "X";
+        function isSecondRowFull(token) {
+            return board[1][0] === token && board[1][1] === token && board[1][2] === token;
         }
-        function isThirdRowFullOfX() {
-            return board[2][0] === "X" && board[2][1] === "X" && board[2][2] === "X";
+        function isThirdRowFull(token) {
+            return board[2][0] === token && board[2][1] === token && board[2][2] === token;
         }
-        function isFirstColumnFullOfX() {
-            return board[0][0] === "X" && board[1][0] === "X" && board[2][0] === "X";
+        function isFirstColumnFull(token) {
+            return board[0][0] === token && board[1][0] === token && board[2][0] === token;
         }
-        function isSecondColumnFullOfX() {
-            return board[0][1] === "X" && board[1][1] === "X" && board[2][1] === "X";
+        function isSecondColumnFull(token) {
+            return board[0][1] === token && board[1][1] === token && board[2][1] === token;
         }
-        function isThirdColumnFullOfX() {
-            return board[0][2] === "X" && board[1][2] === "X" && board[2][2] === "X";
+        function isThirdColumnFull(token) {
+            return board[0][2] === token && board[1][2] === token && board[2][2] === token;
         }
-        function isBottomLeftToTopRightFullOfX() {
-            return board[2][0] === "X" && board[1][1] === "X" && board[0][2] === "X";
+        function isBottomLeftToTopRightFull(token) {
+            return board[2][0] === token && board[1][1] === token && board[0][2] === token;
         }
-        function isTopLeftToBottomRightFullOfX() {
-            return board[0][0] === "X" && board[1][1] === "X" && board[2][2] === "X";
+        function isTopLeftToBottomRightFull(token) {
+            return board[0][0] === token && board[1][1] === token && board[2][2] === token;
         }
-        function isFirstRowFullOfO() {
-            return board[0][0] === "O" && board[0][1] === "O" && board[0][2] === "O";
-        }
-        function isSecondRowFullOfO() {
-            return board[1][0] === "O" && board[1][1] === "O" && board[1][2] === "O";
-        }
-        function isThirdRowFullOfO() {
-            return board[2][0] === "O" && board[2][1] === "O" && board[2][2] === "O";
-        }
-        function isFirstColumnFullOfO() {
-            return board[0][0] === "O" && board[1][0] === "O" && board[2][0] === "O";
-        }
-        function isSecondColumnFullOfO() {
-            return board[0][1] === "O" && board[1][1] === "O" && board[2][1] === "O";
-        }
-        function isThirdColumnFullOfO() {
-            return board[0][2] === "O" && board[1][2] === "O" && board[2][2] === "O";
-        }
-        function isBottomLeftToTopRightFullOfO() {
-            return board[2][0] === "O" && board[1][1] === "O" && board[0][2] === "O";
-        }
-        function isTopLeftToBottomRightFullOfO() {
-            return board[0][0] === "O" && board[1][1] === "O" && board[2][2] === "O";
-        }
-
         return {
-            isFirstRowFullOfX, isSecondRowFullOfX, isThirdRowFullOfX, isFirstColumnFullOfX, isSecondColumnFullOfX, isThirdColumnFullOfX,
-            isBottomLeftToTopRightFullOfX, isTopLeftToBottomRightFullOfX, isFirstRowFullOfO, isSecondRowFullOfO, isThirdRowFullOfO,
-            isFirstColumnFullOfO, isSecondColumnFullOfO, isThirdColumnFullOfO, isBottomLeftToTopRightFullOfO, isTopLeftToBottomRightFullOfO
+            isFirstRowFull, isSecondRowFull, isThirdRowFull, isFirstColumnFull, isSecondColumnFull,
+            isThirdColumnFull, isBottomLeftToTopRightFull, isTopLeftToBottomRightFull
         }
     })();
-
-
     return { playRound }
 })();
