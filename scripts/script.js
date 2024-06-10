@@ -31,22 +31,22 @@ const gameboardObj = (function () {
 })();
 
 
-function createPlayer(name, token) {
-    const getName = () => name;
-    const getToken = () => token;
-    let wins = 0;
-    const getWins = () => wins;
-    const addWin = () => wins++;
-    return { getName, getWins, addWin, getToken }
-}
+const GameController = function () {
 
-const gameController = (function () {
+    function createPlayer(name, token) {
+        const getName = () => name;
+        const getToken = () => token;
+        let wins = 0;
+        const getWins = () => wins;
+        const addWin = () => wins++;
+        return { getName, getWins, addWin, getToken }
+    }
 
     const playerX = createPlayer("X Player", "X");
     const playerO = createPlayer("O Player", "O");
 
     const boardObj = gameboardObj;
-    const board = boardObj.getBoard();
+    const boardArr = boardObj.getBoard();
     let activePlayer = playerX;
 
     function switchActivePlayer() {
@@ -54,11 +54,13 @@ const gameController = (function () {
         console.log("Switched to: " + activePlayer.getName());
     }
 
+    const getActivePlayer = () => activePlayer;
+
     function playRound(row, column) {
         if (row > 2 || column > 2) {
             return "Selection out of bounds";
         } else {
-            if (board[row][column] === "") {
+            if (boardArr[row][column] === "") {
                 boardObj.setCell(row, column, activePlayer.getToken());
                 for (const method in winConditions) {
                     const result = winConditions[method](activePlayer.getToken());
@@ -82,33 +84,78 @@ const gameController = (function () {
 
     const winConditions = (function () {
         function isFirstRowFull(token) {
-            return board[0][0] === token && board[0][1] === token && board[0][2] === token;
+            return boardArr[0][0] === token && boardArr[0][1] === token && boardArr[0][2] === token;
         }
         function isSecondRowFull(token) {
-            return board[1][0] === token && board[1][1] === token && board[1][2] === token;
+            return boardArr[1][0] === token && boardArr[1][1] === token && boardArr[1][2] === token;
         }
         function isThirdRowFull(token) {
-            return board[2][0] === token && board[2][1] === token && board[2][2] === token;
+            return boardArr[2][0] === token && boardArr[2][1] === token && boardArr[2][2] === token;
         }
         function isFirstColumnFull(token) {
-            return board[0][0] === token && board[1][0] === token && board[2][0] === token;
+            return boardArr[0][0] === token && boardArr[1][0] === token && boardArr[2][0] === token;
         }
         function isSecondColumnFull(token) {
-            return board[0][1] === token && board[1][1] === token && board[2][1] === token;
+            return boardArr[0][1] === token && boardArr[1][1] === token && boardArr[2][1] === token;
         }
         function isThirdColumnFull(token) {
-            return board[0][2] === token && board[1][2] === token && board[2][2] === token;
+            return boardArr[0][2] === token && boardArr[1][2] === token && boardArr[2][2] === token;
         }
         function isBottomLeftToTopRightFull(token) {
-            return board[2][0] === token && board[1][1] === token && board[0][2] === token;
+            return boardArr[2][0] === token && boardArr[1][1] === token && boardArr[0][2] === token;
         }
         function isTopLeftToBottomRightFull(token) {
-            return board[0][0] === token && board[1][1] === token && board[2][2] === token;
+            return boardArr[0][0] === token && boardArr[1][1] === token && boardArr[2][2] === token;
         }
         return {
             isFirstRowFull, isSecondRowFull, isThirdRowFull, isFirstColumnFull, isSecondColumnFull,
             isThirdColumnFull, isBottomLeftToTopRightFull, isTopLeftToBottomRightFull
         }
-    })();
-    return { playRound }
-})();
+    });
+    return { playRound, getActivePlayer, getBoard: boardObj.getBoard }
+};
+
+function ScreenController() {
+    const game = GameController();
+
+    const playerTurn = document.querySelector(".player-turn");
+    const boardDivs = document.querySelectorAll(".square");
+
+
+    function updateScreen() {
+        const boardArr = game.getBoard();
+        console.log(boardArr);
+        const activePlayer = game.getActivePlayer();
+
+        playerTurn.textContent = `It's ${activePlayer.getName()}'s Turn`;
+
+
+        let counter = 0;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (boardArr[i][j] === "X") {
+                    boardDivs[counter].children[1].style.display = "block";
+                } if (boardArr[i][j] === "O") {
+                    boardDivs[counter].children[0].style.display = "block";
+                }
+                counter++
+            }
+        }
+    }
+
+    game.playRound(0, 0);
+    updateScreen();
+    game.playRound(1, 0);
+    updateScreen();
+    game.playRound(0, 1);
+    updateScreen();
+    game.playRound(1, 1);
+    updateScreen();
+    game.playRound(0, 2);
+    updateScreen();
+
+
+    function clickHandler() {
+
+    }
+}
