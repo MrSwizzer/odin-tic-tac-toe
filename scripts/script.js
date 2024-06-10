@@ -36,49 +36,45 @@ const GameController = function () {
     function createPlayer(name, token) {
         const getName = () => name;
         const getToken = () => token;
-        let wins = 0;
-        const getWins = () => wins;
-        const addWin = () => wins++;
-        return { getName, getWins, addWin, getToken }
+        return { getName, getToken }
     }
 
-    const playerX = createPlayer("X Player", "X");
-    const playerO = createPlayer("O Player", "O");
+    const playerX = createPlayer("Player X", "X");
+    const playerO = createPlayer("Player O", "O");
 
     const boardObj = gameboardObj;
     const boardArr = boardObj.getBoard();
     let activePlayer = playerX;
+    let otherPlayer = playerO;
+    let roundWinner;
 
     function switchActivePlayer() {
         activePlayer = (activePlayer === playerX) ? playerO : playerX;
+        otherPlayer = (otherPlayer === playerO) ? playerX : playerO;
+
         console.log("Switched to: " + activePlayer.getName());
     }
 
     const getActivePlayer = () => activePlayer;
 
     function playRound(row, column) {
-        if (row > 2 || column > 2) {
-            return "Selection out of bounds";
-        } else {
-            if (boardArr[row][column] === "") {
-                boardObj.setCell(row, column, activePlayer.getToken());
-                for (const method in winConditions) {
-                    const result = winConditions[method](activePlayer.getToken());
-                    if (winConditions.hasOwnProperty(method) && result) {
-                        boardObj.resetBoard();
-                        activePlayer.addWin();
-                        console.log(`Player X Wins: ${playerX.getWins()}`);
-                        console.log(`Player O Wins: ${playerO.getWins()}`);
-                        console.log(`${activePlayer.getName()} Won the Game!`);
-                        switchActivePlayer();
-                        return
-                    }
+        if (boardArr[row][column] === "") {
+            boardObj.setCell(row, column, activePlayer.getToken());
+            
+            for (const method in winConditions) {
+                let result = winConditions[method](activePlayer.getToken());
+                if (winConditions.hasOwnProperty(method) && result) {
+                    boardObj.resetBoard();
+                    switchActivePlayer();
+                    console.log(boardObj.getBoard());
+                    return `${otherPlayer.getName()} Won the Game!`
                 }
-                switchActivePlayer();
-                console.log(boardObj.getBoard());
-            } else {
-                return "Cell is already taken";
             }
+            switchActivePlayer();
+            console.log(boardObj.getBoard());
+            return `Token placed.`
+        } else {
+            return "Cell is already taken";
         }
     }
 
@@ -111,7 +107,7 @@ const GameController = function () {
             isFirstRowFull, isSecondRowFull, isThirdRowFull, isFirstColumnFull, isSecondColumnFull,
             isThirdColumnFull, isBottomLeftToTopRightFull, isTopLeftToBottomRightFull
         }
-    });
+    })();
     return { playRound, getActivePlayer, getBoard: boardObj.getBoard }
 };
 
@@ -119,12 +115,11 @@ function ScreenController() {
     const game = GameController();
 
     const playerTurn = document.querySelector(".player-turn");
-    const boardDivs = document.querySelectorAll(".square");
+    const boardButtons = document.querySelectorAll(".square");
 
 
     function updateScreen() {
         const boardArr = game.getBoard();
-        console.log(boardArr);
         const activePlayer = game.getActivePlayer();
 
         playerTurn.textContent = `It's ${activePlayer.getName()}'s Turn`;
@@ -134,28 +129,24 @@ function ScreenController() {
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (boardArr[i][j] === "X") {
-                    boardDivs[counter].children[1].style.display = "block";
-                } if (boardArr[i][j] === "O") {
-                    boardDivs[counter].children[0].style.display = "block";
+                    boardButtons[counter].children[1].style.display = "block";
+                } else if (boardArr[i][j] === "O") {
+                    boardButtons[counter].children[0].style.display = "block";
+                } else {
+                    boardButtons[counter].children[0].style.display = "none";
+                    boardButtons[counter].children[1].style.display = "none";
                 }
                 counter++
             }
         }
     }
 
-    game.playRound(0, 0);
-    updateScreen();
-    game.playRound(1, 0);
-    updateScreen();
-    game.playRound(0, 1);
-    updateScreen();
-    game.playRound(1, 1);
-    updateScreen();
-    game.playRound(0, 2);
-    updateScreen();
-
-
-    function clickHandler() {
-
-    }
+    boardButtons.forEach(function(button) {
+        button.addEventListener("click", () => {
+            const row = button.dataset.row;
+            const column = button.dataset.column;
+            game.playRound(row, column);
+            updateScreen();
+        });
+    });
 }

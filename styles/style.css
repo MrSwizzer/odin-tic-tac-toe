@@ -118,6 +118,14 @@ h1 {
     margin-bottom: 4vh;
 }
 
+.player-turn {
+    font-family: Impact, 'Arial Narrow Bold', sans-serif;
+    font-size: 4rem;
+    font-weight: bolder;
+    margin-bottom: 4vh;
+    text-align: center;
+}
+
 .grid-wrapper {
     justify-self: center;
     list-style: none;
@@ -131,8 +139,11 @@ h1 {
 
 .square{
     box-sizing: border-box;
+    height: 200px;
+    width: 200px;
     border: 5px solid black;
     background-color: gray;
+    padding: 0px;
 }
 
 .circle {
