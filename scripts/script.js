@@ -45,12 +45,9 @@ const GameController = function () {
     const boardObj = gameboardObj;
     const boardArr = boardObj.getBoard();
     let activePlayer = playerX;
-    let otherPlayer = playerO;
-    let roundWinner;
 
     function switchActivePlayer() {
         activePlayer = (activePlayer === playerX) ? playerO : playerX;
-        otherPlayer = (otherPlayer === playerO) ? playerX : playerO;
 
         console.log("Switched to: " + activePlayer.getName());
     }
@@ -60,19 +57,18 @@ const GameController = function () {
     function playRound(row, column) {
         if (boardArr[row][column] === "") {
             boardObj.setCell(row, column, activePlayer.getToken());
-            
+
             for (const method in winConditions) {
                 let result = winConditions[method](activePlayer.getToken());
                 if (winConditions.hasOwnProperty(method) && result) {
                     boardObj.resetBoard();
+                    const roundWinner = activePlayer;
                     switchActivePlayer();
-                    console.log(boardObj.getBoard());
-                    return `${otherPlayer.getName()} Won the Game!`
+                    return `${roundWinner.getName()} Won the Game!`
                 }
             }
+            
             switchActivePlayer();
-            console.log(boardObj.getBoard());
-            return `Token placed.`
         } else {
             return "Cell is already taken";
         }
@@ -114,7 +110,8 @@ const GameController = function () {
 function ScreenController() {
     const game = GameController();
 
-    const playerTurn = document.querySelector(".player-turn");
+    const playerTurnParagraph = document.querySelector(".player-turn");
+    const infoParagraph = document.querySelector(".info");
     const boardButtons = document.querySelectorAll(".square");
 
 
@@ -122,7 +119,7 @@ function ScreenController() {
         const boardArr = game.getBoard();
         const activePlayer = game.getActivePlayer();
 
-        playerTurn.textContent = `It's ${activePlayer.getName()}'s Turn`;
+        playerTurnParagraph.textContent = `It's ${activePlayer.getName()}'s Turn`;
 
 
         let counter = 0;
@@ -141,12 +138,17 @@ function ScreenController() {
         }
     }
 
-    boardButtons.forEach(function(button) {
-        button.addEventListener("click", () => {
-            const row = button.dataset.row;
-            const column = button.dataset.column;
-            game.playRound(row, column);
-            updateScreen();
-        });
+    function clickHandler(e) {
+        const row = e.target.dataset.row;
+        const column = e.target.dataset.column;
+        let info = game.playRound(row, column);
+        infoParagraph.textContent = info;
+        updateScreen();
+    }
+
+    boardButtons.forEach(function (button) {
+        button.addEventListener("click", clickHandler);
     });
 }
+
+ScreenController();

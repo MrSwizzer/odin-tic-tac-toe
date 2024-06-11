@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/style.css">
-    <script src="./scripts/script.js"></script>
+    <script src="./scripts/script.js" defer></script>
     <title>Tic Tac Toe Game</title>
 </head>
 
@@ -14,43 +14,44 @@
     <div class="wrapper">
         <h1>Tic Tac Toe</h1>
         <p class="player-turn">It's Player X's Turn</p>
+        <p class="info"></p>
         <div class="grid-wrapper">
             
             <button class="square" data-row="0" data-column="0" id="square-1">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="0" data-column="0" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="0" data-column="0" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
             <button class="square" data-row="0" data-column="1" id="square-2">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="0" data-column="1" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="0" data-column="1" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
             <button class="square" data-row="0" data-column="2" id="square-3">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="0" data-column="2" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="0" data-column="2" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
             <button class="square" data-row="1" data-column="0" id="square-4">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="1" data-column="0" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="1" data-column="0" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
             <button class="square" data-row="1" data-column="1" id="square-5">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="1" data-column="1" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="1" data-column="1" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
             <button class="square" data-row="1" data-column="2" id="square-6">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="1" data-column="2" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="1" data-column="2" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
             <button class="square" data-row="2" data-column="0" id="square-7">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="2" data-column="0" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="2" data-column="0" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
             <button class="square" data-row="2" data-column="1" id="square-8">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="2" data-column="1" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="2" data-column="1" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
             <button class="square" data-row="2" data-column="2" id="square-9">
-                <img class="circle" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
-                <img class="cross" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
+                <img class="circle" data-row="2" data-column="2" src="./images/circle-svgrepo-com.svg" alt="cricle-icon" height="190px" width="190px">
+                <img class="cross" data-row="2" data-column="2" src="./images/cross-svgrepo-com.svg" alt="cross-icon" height="190px" width="190px">
             </button>
         </div>
     </div>
