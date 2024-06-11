@@ -61,17 +61,22 @@ const GameController = function () {
             for (const method in winConditions) {
                 let result = winConditions[method](activePlayer.getToken());
                 if (winConditions.hasOwnProperty(method) && result) {
-                    boardObj.resetBoard();
                     const roundWinner = activePlayer;
                     switchActivePlayer();
                     return `${roundWinner.getName()} Won the Game!`
                 }
             }
-            
+            if (!boardArr.some(row => row.includes(""))) {
+                return "It's a Tie"
+            }
             switchActivePlayer();
         } else {
             return "Cell is already taken";
         }
+    }
+
+    function restartGame() {
+        boardObj.resetBoard();
     }
 
     const winConditions = (function () {
@@ -104,7 +109,7 @@ const GameController = function () {
             isThirdColumnFull, isBottomLeftToTopRightFull, isTopLeftToBottomRightFull
         }
     })();
-    return { playRound, getActivePlayer, getBoard: boardObj.getBoard }
+    return { playRound,restartGame, getActivePlayer, getBoard: boardObj.getBoard }
 };
 
 function ScreenController() {
@@ -113,6 +118,7 @@ function ScreenController() {
     const playerTurnParagraph = document.querySelector(".player-turn");
     const infoParagraph = document.querySelector(".info");
     const boardButtons = document.querySelectorAll(".square");
+    const restartButton = document.querySelector(".restart");
 
 
     function updateScreen() {
@@ -137,6 +143,12 @@ function ScreenController() {
             }
         }
     }
+
+    restartButton.addEventListener("click", () => {
+        game.restartGame();
+        infoParagraph.textContent = "";
+        updateScreen();
+    })
 
     function clickHandler(e) {
         const row = e.target.dataset.row;
