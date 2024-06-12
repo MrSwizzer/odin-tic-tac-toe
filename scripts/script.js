@@ -33,23 +33,33 @@ const gameboardObj = (function () {
 
 const GameController = function () {
 
+    const boardObj = gameboardObj;
+    const boardArr = boardObj.getBoard();
+
     function createPlayer(name, token) {
         const getName = () => name;
         const getToken = () => token;
         return { getName, getToken }
     }
 
-    const playerX = createPlayer("Player X", "X");
-    const playerO = createPlayer("Player O", "O");
+    let playerOne;
+    let playerTwo;
+    let activePlayer
 
-    const boardObj = gameboardObj;
-    const boardArr = boardObj.getBoard();
-    let activePlayer = playerX;
+    document.addEventListener('namesSubmitted', (event) => {
+        const playerOneName = event.detail.playerOne;
+        const playerTwoName = event.detail.playerTwo;
+
+        playerOne = createPlayer(playerOneName, "X");
+        playerTwo = createPlayer(playerTwoName, "O");
+        activePlayer = playerOne;
+
+        console.log("Spieler X: " + playerOne.getName());
+        console.log("Spieler O: " + playerTwo.getName());
+    });
 
     function switchActivePlayer() {
-        activePlayer = (activePlayer === playerX) ? playerO : playerX;
-
-        console.log("Switched to: " + activePlayer.getName());
+        activePlayer = (activePlayer === playerOne) ? playerTwo : playerOne;
     }
 
     const getActivePlayer = () => activePlayer;
@@ -109,7 +119,7 @@ const GameController = function () {
             isThirdColumnFull, isBottomLeftToTopRightFull, isTopLeftToBottomRightFull
         }
     })();
-    return { playRound,restartGame, getActivePlayer, getBoard: boardObj.getBoard }
+    return { playRound, restartGame, getActivePlayer, getBoard: boardObj.getBoard }
 };
 
 function ScreenController() {
@@ -119,6 +129,9 @@ function ScreenController() {
     const infoParagraph = document.querySelector(".info");
     const boardButtons = document.querySelectorAll(".square");
     const restartButton = document.querySelector(".restart");
+    const submitNamesButton = document.querySelector(".submit-names")
+    const modal = document.querySelector(".modal")
+
 
 
     function updateScreen() {
@@ -144,6 +157,7 @@ function ScreenController() {
         }
     }
 
+
     restartButton.addEventListener("click", () => {
         game.restartGame();
         infoParagraph.textContent = "";
@@ -160,6 +174,21 @@ function ScreenController() {
 
     boardButtons.forEach(function (button) {
         button.addEventListener("click", clickHandler);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        modal.showModal();
+    });
+
+    submitNamesButton.addEventListener('click', () => {
+        const playerOneName = document.getElementById('playerOneInput').value;
+        const playerTwoName = document.getElementById('playerTwoInput').value;
+
+        const namesSubmittedEvent = new CustomEvent('namesSubmitted', {
+            detail: { playerOne: playerOneName, playerTwo: playerTwoName }
+        });
+        document.dispatchEvent(namesSubmittedEvent);
+        modal.close();
     });
 }
 
